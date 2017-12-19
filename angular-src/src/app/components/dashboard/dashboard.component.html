@@ -1,0 +1,32 @@
+<form (submit)=StartQuiz()>
+<div *ngIf="course_List" class="form-control main">
+
+  <h1 class="page-header">Courses</h1>
+  
+  <br/>
+  <br/>
+
+  <select (change)="onSelectCourse()" [(ngModel)]="selected_course" class="form-control list" name="something">    
+    <option *ngFor="let course of course_List" value= {{course.Course_Name}} class="list form-control">
+       {{ course.Course_Name }}       
+    </option>
+  </select>
+  
+  <br/>
+  <br/>
+
+  <select (change)="onSelectTopic()" [(ngModel)]="selected_topic" class="form-control list" name="something">
+    <option *ngFor="let topic of topic_List" value= {{topic}} class="list form-control">
+      {{topic}}
+    </option>
+  </select>
+  
+  <br/>
+  <br/>
+
+  <input type="submit" class="btn btn-primary" value="Start" name="something">
+
+  <br/>
+  <br/>
+</div>
+</form>

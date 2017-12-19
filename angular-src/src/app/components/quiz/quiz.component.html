@@ -1,0 +1,24 @@
+<form>
+<br/>
+<h2> Course Name : {{course}}</h2>
+<h2> Topic Name : {{topic}}</h2>
+
+<br/>
+
+<div *ngFor="let question of quiz_data;let ind=index">
+   {{ind+1}} - {{ question.Description }}
+
+   <!-- click=SaveResult({{ind}},{{inde}}) onSelect=SaveResult(ind,inde) ngModel=results[{{ind}}]-->
+   
+   <div *ngFor="let choice of question.Choices;let inde = index">
+      <div>
+        <input type="radio"  name={{100+ind}} id={{inde}} (change)="SaveResult(ind,inde)"
+            value={{index}} >
+            {{choice.Description}}
+      </div>
+    </div>
+<br/>
+</div>
+<button name="something" (click)="CalculatingResult()" class="btn btn-primary" id="submit"> Submit </button>
+<br/><br/><br/>
+</form>
