@@ -8,11 +8,11 @@ import { Router } from '@angular/router';
 })
 export class ResultComponent implements OnInit {
 
-  questions : any;
-  choices : any;
-  data : any;
+  questions: any;
+  choices: any;
+  data: any;
 
-  constructor(private router:Router) { }
+  constructor(private router: Router) { }
 
   ngOnInit() {
     this.questions = JSON.parse(localStorage.getItem("question"));
@@ -20,12 +20,10 @@ export class ResultComponent implements OnInit {
     this.data = JSON.parse(localStorage.getItem("data"));
   }
 
-  ResultsHighlights()
-  {
+  ResultsHighlights() {
     console.log("script");
     let i = 0;
-    for(var j=0;j<this.data.length;j++)
-    {
+    for (var j = 0; j < this.data.length; j++) {
       var question = document.getElementById('+ (100+j) +');
       console.log(question)
       // for(var k=0;k<choice.length;k++)
