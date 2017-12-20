@@ -1,8 +1,15 @@
 .correct {
     background-color: yellow;
+    width: 30%;
+}
+
+.correct_with_wrong{
+    background-color: greenyellow;
+    width: 30%;
 }
 
 .wrong {
-    background-color: chocolate;
+    background-color: red;
     text-decoration-color: white;
+    width: 30%;
 }
