@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { QuizService } from '../../services/quiz.service';
 import { DataService } from '../../services/data.service';
 import { Router } from '@angular/router';
+import {FlashMessagesService} from 'angular2-flash-messages';
 
 declare var $:any;
 
@@ -25,13 +26,29 @@ export class QuizComponent implements OnInit {
   final_question = [];
   final_choice = [];
   
-  constructor(private dataService : DataService ,  private quizService : QuizService, private router:Router) { }
+  constructor(private dataService : DataService ,  private quizService : QuizService, private router:Router,private flashMessgae : FlashMessagesService) { }
 
   ngOnInit() {
     
     this.course = this.dataService.course;
     this.topic = this.dataService.topic;
 
+    // --------------- Add New Questions -------------- ok 
+
+    // this.quizService.add_New_Quiz_Questions().subscribe(data => {
+    //   if(data.success)
+    //       {
+    //         this.flashMessgae.show("Your Questions is registered and can log In.",{cssClass : 'alert-success', timeout : 3000});    
+    //         //this.router.navigate(['/login']);
+    //       }
+    //       else
+    //       {
+    //         this.flashMessgae.show("Something went Wrong Questions",{cssClass : 'alert-danger', timeout : 3000});    
+    //         //this.router.navigate(['/register']);
+    //       }
+    // });
+
+    //console.log(this.course,this.topic);
     // --------------- Get Quiz Data ---------------
     
     this.quizService.getQuizData(this.dataService.course,this.dataService.topic).subscribe(list => {

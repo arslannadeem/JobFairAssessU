@@ -16,18 +16,37 @@ export class QuizService {
     this.authToken = token;
     }
 
-  getQuizDatas()
-  {
-    console.log('Quiz Service')
-    let headers = new Headers();
-    this.loadToken();
-    headers.append('Authorization',this.authToken);
-    headers.append('Content-Type','application/json');
-    return this.http.post('http://localhost:3000/question/getAllQuestion',{headers : headers})
-    .map(res => {
-      return res.json();
-    })
-  }
+    //-------------------- Add New Question ---------------- ok
+
+    add_New_Quiz_Questions()
+    {
+      console.log('Quiz Service')
+      let headers = new Headers();
+      this.loadToken();
+      headers.append('Authorization',this.authToken);
+      headers.append('Content-Type','application/json');
+      return this.http.post('http://localhost:3000/question/newQuestion',{headers : headers})
+      .map(res => {
+        return res.json();
+      })
+    }
+
+    //----------- extra ---------
+
+  // getQuizDatas()
+  // {
+  //   console.log('Quiz Service')
+  //   let headers = new Headers();
+  //   this.loadToken();
+  //   headers.append('Authorization',this.authToken);
+  //   headers.append('Content-Type','application/json');
+  //   return this.http.post('http://localhost:3000/question/getAllQuestion',{headers : headers})
+  //   .map(res => {
+  //     return res.json();
+  //   })
+  // }
+
+  
 
   getQuizData(course : any , topic : any)
   {
@@ -38,7 +57,7 @@ export class QuizService {
     this.loadToken();
     headers.append('Authorization',this.authToken);
     headers.append('Content-Type','application/json');
-    return this.http.post('http://localhost:3000/quiz/getQuestions',(this.data),{headers : headers})
+    return this.http.post('http://localhost:3000/question/getAllQuestions',(this.data),{headers : headers})
     .map(res => {
       return res.json();
     })

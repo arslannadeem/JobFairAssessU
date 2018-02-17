@@ -1,32 +1,43 @@
-<form (submit)=StartQuiz()>
-<div *ngIf="course_List" class="form-control main">
+<form *ngIf="usertype" name ="candidate" (submit)=StartQuiz()>
+  <div *ngIf="course_List" class="form-control main">
 
-  <h1 class="page-header">Courses</h1>
-  
-  <br/>
-  <br/>
+    <h1 class="page-header">Courses</h1>
 
-  <select (change)="onSelectCourse()" [(ngModel)]="selected_course" class="form-control list" name="something">    
-    <option *ngFor="let course of course_List" value= {{course.Course_Name}} class="list form-control">
-       {{ course.Course_Name }}       
-    </option>
-  </select>
-  
-  <br/>
-  <br/>
+    <br/>
+    <br/>
 
-  <select (change)="onSelectTopic()" [(ngModel)]="selected_topic" class="form-control list" name="something">
-    <option *ngFor="let topic of topic_List" value= {{topic}} class="list form-control">
-      {{topic}}
-    </option>
-  </select>
-  
-  <br/>
-  <br/>
+    <select (change)="onSelectCourse()" [(ngModel)]="selected_course" class="form-control list" name="something">
+      <option value = "0" label = "Select One Course"></option>
+      <option *ngFor="let course of course_List" class="list form-control">
+        {{ course.Course_Name }}
+      </option>
+    </select>
 
-  <input type="submit" class="btn btn-primary" value="Start" name="something">
+    <br/>
+    <br/>
 
-  <br/>
-  <br/>
-</div>
+    <select (change)="onSelectTopic()" [(ngModel)]="selected_topic" class="form-control list" name="something">
+      <option value = "0" label = "Select One Topic"></option>
+      <option *ngFor="let topic of topic_List" class="list form-control">
+        {{topic.Topic_Name}}
+      </option>
+    </select>
+
+    <br/>
+    <br/>
+
+    <input type="submit" class="btn btn-primary" value="Start" name="something" />
+    
+    <br/>
+    <br/>
+  </div>
 </form>
+
+<div>
+    <div *ngIf="!usertype">
+            <button class="admin_panel_box btn">Modify Course</button>
+            <button class="admin_panel_box btn" click="call_modify_topic()">Modify Topics</button>
+            <button class="admin_panel_box btn">Modify Questions</button>
+      
+    </div>
+</div>

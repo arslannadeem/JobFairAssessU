@@ -12,15 +12,30 @@ import { DataService } from "../../services/data.service";
 
 export class DashboardComponent implements OnInit {
 
-  course_List : any;
+  course_List = [];
   topic_List : any;
   selected_course : any;
   selected_topic : any;
+  usertype = null;
 
   constructor(private data: DataService,private courseService : CourseService, private router:Router, private flashMessgae : FlashMessagesService) { }
 
   ngOnInit() {
-    //  Register User
+    var check = localStorage.getItem("userType");
+      if( check == "Admin")
+      {
+        this.usertype = false;
+      }
+      else
+      {
+        this.usertype = true;
+      }
+
+      console.log(check);
+      //console.log(localStorage.getItem("UserType"));
+
+  // --------------- Add Courses Data ---------------
+
   //   this.courseService.addCourseData().subscribe(data => {
   //     if(data.success)
   //     {
@@ -38,13 +53,14 @@ export class DashboardComponent implements OnInit {
 
     this.courseService.getCoursesData().subscribe(list => {
       this.course_List = list.data;
-      // this.course_List.forEach(function (course) {
-      // });
+      console.log(this.course_List);
     },
     err => {
       return false;
     });
   }
+
+  // ---------------- On Select Course --------------
 
   onSelectCourse() { 
     console.log(this.selected_course)
@@ -57,13 +73,25 @@ export class DashboardComponent implements OnInit {
     }
   }
 
+  // ---------------- On Select Topic ---------------
+
   onSelectTopic(){
     console.log(this.selected_topic)
   }
+
+  // ------------------- Start Quiz -----------------
 
   StartQuiz()
   {
       this.data.passValues(this.selected_course,this.selected_topic);
       this.router.navigate(['/quiz']);
   }
+
+  // ----------------- For Admin Panel --------------
+
+  call_modify_topic()
+  {
+    this.router.navigate(['modify-topic']);
+  }  
+  
 }

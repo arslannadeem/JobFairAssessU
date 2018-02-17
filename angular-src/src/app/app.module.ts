@@ -19,10 +19,14 @@ import {AuthService} from './services/auth.service';
 import {CourseService} from './services/course.service';
 import {QuizService} from './services/quiz.service';
 import {DataService} from './services/data.service';
+import {ArticleService} from './services/article.service';
+import {ModifyTopicService} from './services/modify-topic.service';
 
 import { CoursesComponent } from './components/courses/courses.component';
 import { QuizComponent } from './components/quiz/quiz.component';
 import { ResultComponent } from './components/result/result.component';
+import { ModifyTopicComponent } from './components/modify-topic/modify-topic.component';
+import { ModifyQuestionComponent } from './components/modify-question/modify-question.component';
 
 const appRoutes : Routes = [
   {path: '', component : HomeComponent},
@@ -32,7 +36,8 @@ const appRoutes : Routes = [
   {path: 'profile', component : ProfileComponent,canActivate:[AuthGuard]},
   {path: 'courses',component : CoursesComponent},
   {path: 'quiz',component : QuizComponent},
-  {path: 'result',component : ResultComponent}
+  {path: 'result',component : ResultComponent},
+  {path: 'modify-topic',component : ModifyTopicComponent}
 ]
 
 @NgModule({
@@ -46,7 +51,9 @@ const appRoutes : Routes = [
     ProfileComponent,
     CoursesComponent,
     QuizComponent,
-    ResultComponent
+    ResultComponent,
+    ModifyTopicComponent,
+    ModifyQuestionComponent
   ],
   imports: [
     BrowserModule,
@@ -55,7 +62,7 @@ const appRoutes : Routes = [
     RouterModule.forRoot(appRoutes),
     FlashMessagesModule
   ],
-  providers: [ValidateService,AuthService,AuthGuard,CourseService,QuizService,DataService],
+  providers: [ValidateService,AuthService,AuthGuard,CourseService,QuizService,DataService,ArticleService,ModifyTopicService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

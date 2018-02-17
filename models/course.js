@@ -5,6 +5,71 @@ const config = require('../config/database');
 //Course Schema
 
 const CourseSchema = mongoose.Schema({
+    _id : { type : Number,auto: true}, 
+    Course_Name: {
+        type: String,
+        required: true
+    },
+    Topics: [{
+        _id : { type : Number,auto: true}, 
+        Topic_Name: {
+            type: String,
+            required: true
+        },
+        SubTopics: [ {
+            _id : { type : Number,auto: true}, 
+            Sub_Topic_Name: {
+                type: String,
+                required: true
+            }
+        }]
+    }]
+},{_id: false});
+
+const Course = module.exports = mongoose.model('Course', CourseSchema);
+
+//--- Add New Course ----
+
+module.exports.addCourse = function(newCourse,callback){
+    newCourse.save(callback);
+}
+
+//--- Add New Topics ----
+
+module.exports.addTopics = function(data,callback){
+    //newCourse.save(callback);
+
+    var node  = [{Topic_Name : String, SubTopics : [{ Sub_Topic_Name : String}]}];
+
+    list_of_sub_headings = [];
+
+    for(var i=0;i<data.length;i++)
+    {
+        if(data[i].length==4)
+        {
+            var names = data[i][0];
+            var sub_headings = data[i][1].sub.sub_heading;
+        }
+        if(data[i].length==3)
+        {
+
+        }
+    }
+    //Course.update({_id:1},{$set : {"Topics.$.Topic_Name": data,"Topics.$.SubTopics.$.Sub_Topic_Name":data}})
+}
+
+//--- Get All Course ----
+
+module.exports.getAllCourse = function (callback) {
+    Course.find({},['Course_Name','Topics'],callback);
+}
+
+//---------------------------- OLD CODE ---------------------
+
+/*
+//Course Schema
+
+const CourseSchema = mongoose.Schema({
     Course_Name: {
         type: String,
         required: true
@@ -110,3 +175,5 @@ module.exports.getCourseByName = function(callback){
         }
     });
 }
+
+*/

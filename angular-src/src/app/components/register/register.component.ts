@@ -19,7 +19,7 @@ export class RegisterComponent implements OnInit {
   password : String;
   type : String;
 
-  userType : any = [{name : "Select_One"},{name : "Candidate"},{name : "Employee"}]; 
+  userType : any = [{name : "Select_One"},{name : "Candidate"}]; 
   selectedType : any;
 
   constructor(

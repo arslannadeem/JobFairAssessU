@@ -16,6 +16,8 @@ export class CourseService {
     this.authToken = token;
     }
 
+  //--------------------------------- Get Course Data -----------------------  ok
+
   getCoursesData()
   {
     console.log('Course Service')
@@ -29,13 +31,29 @@ export class CourseService {
     })
   }
 
+  //--------------------------------- Add Course Data -----------------------
+
   addCourseData()
   {
     let headers = new Headers();
     this.loadToken();
     headers.append('Authorization',this.authToken);
     headers.append('Content-Type','application/json');
+    console.log("service")
     return this.http.post('http://localhost:3000/course/newCourse',{headers : headers})
+    .map(res => {
+      return res.json();
+    })
+  }
+
+  addTopicsData(list : any)
+  {
+    let headers = new Headers();
+    this.loadToken();
+    headers.append('Authorization',this.authToken);
+    headers.append('Content-Type','application/json');
+    console.log("service")
+    return this.http.post('http://localhost:3000/course/newTopics',list,{headers : headers})
     .map(res => {
       return res.json();
     })
