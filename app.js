@@ -28,6 +28,8 @@ const app = express();
 const users = require('./routes/users');
 const course = require('./routes/course');
 const quiz = require('./routes/question');
+const article = require('./routes/article');
+const crawl = require('./routes/scrapping');
 
 // Port Number
 const port = 3000;
@@ -49,7 +51,9 @@ require('./config/passport')(passport);
 
 app.use('/users',users);
 app.use('/course',course);
-app.use('/quiz',quiz);
+app.use('/question',quiz);
+app.use('/article',article);
+app.use('/modify-topic',crawl);
 
 // Index Route
 app.get('/',(req,res)=> {

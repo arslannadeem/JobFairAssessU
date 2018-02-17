@@ -22,14 +22,17 @@
     "angular2-flash-messages": "^1.0.8",
     "bcryptjs": "*",
     "body-parser": "*",
+    "cheerio": "^1.0.0-rc.2",
     "cors": "*",
     "express": "*",
     "jquery": "^3.2.1",
     "jsonwebtoken": "*",
     "mongoose": "*",
+    "mongoose-auto-increment": "^5.0.1",
     "passport": "*",
     "passport-jwt": "*",
-    "typescript": "^2.6.1"
+    "request": "^2.83.0",
+    "typescript": "^2.6.2"
   },
   "author": "Arslan",
   "license": "ISC",
