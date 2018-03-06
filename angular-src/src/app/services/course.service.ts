@@ -6,7 +6,7 @@ import "rxjs/add/operator/toPromise";
 
 @Injectable()
 export class CourseService {
-
+  data : any;
   authToken : any;
 
   constructor(private http : Http) { }
@@ -16,11 +16,10 @@ export class CourseService {
     this.authToken = token;
     }
 
-  //--------------------------------- Get Course Data -----------------------  ok
+  //============================= Get All Course Data =======================  ok
 
   getCoursesData()
   {
-    console.log('Course Service')
     let headers = new Headers();
     this.loadToken();
     headers.append('Authorization',this.authToken);
@@ -31,7 +30,7 @@ export class CourseService {
     })
   }
 
-  //--------------------------------- Add Course Data -----------------------
+  //=============================== Add New Course Data =======================  ok
 
   addCourseData()
   {
@@ -39,23 +38,54 @@ export class CourseService {
     this.loadToken();
     headers.append('Authorization',this.authToken);
     headers.append('Content-Type','application/json');
-    console.log("service")
+    //console.log("service")
     return this.http.post('http://localhost:3000/course/newCourse',{headers : headers})
     .map(res => {
       return res.json();
     })
   }
 
-  addTopicsData(list : any)
+  //============================ Get Topics By Course =======================  ok
+
+  getTopicsByCourse(name : any)
   {
+    this.data = {"course" : name};
+
     let headers = new Headers();
     this.loadToken();
     headers.append('Authorization',this.authToken);
     headers.append('Content-Type','application/json');
-    console.log("service")
-    return this.http.post('http://localhost:3000/course/newTopics',list,{headers : headers})
+    return this.http.post('http://localhost:3000/course/getTopicsByCourse',(this.data),{headers : headers})
     .map(res => {
       return res.json();
     })
   }
+
+  //========================= Add Crawl Topics By Course =======================  ok
+
+  add_Crawl_Topics(course_name : String, list : any)
+  {
+    this.data = {"List" : list,"course_name" : course_name};
+    let headers = new Headers();
+    this.loadToken();
+    headers.append('Authorization',this.authToken);
+    headers.append('Content-Type','application/json');
+    return this.http.post('http://localhost:3000/course/add_Crawl_Topics',(this.data),{headers : headers})
+    .map(res => {
+      return res.json();
+    })
+  }
+
+    // addTopicsData(list : any)
+  // {
+  //   let headers = new Headers();
+  //   this.loadToken();
+  //   headers.append('Authorization',this.authToken);
+  //   headers.append('Content-Type','application/json');
+  //   console.log("service")
+  //   return this.http.post('http://localhost:3000/course/newTopics',list,{headers : headers})
+  //   .map(res => {
+  //     return res.json();
+  //   })
+  // }
 }

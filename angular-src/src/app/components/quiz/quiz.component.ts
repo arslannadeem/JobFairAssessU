@@ -11,6 +11,7 @@ declare var $:any;
   templateUrl: './quiz.component.html',
   styleUrls: ['./quiz.component.css']
 })
+
 export class QuizComponent implements OnInit {
 
   course : any;
@@ -51,13 +52,18 @@ export class QuizComponent implements OnInit {
     //console.log(this.course,this.topic);
     // --------------- Get Quiz Data ---------------
     
+    console.log("before call quiz service");
+
     this.quizService.getQuizData(this.dataService.course,this.dataService.topic).subscribe(list => {
-      this.quiz_data = list.data; 
+      this.quiz_data = list.data;
+      //console.log(list.data); 
     });
   }
 
   SaveResult(question_id : number,choice_id : number)
   {
+    console.log({"question_id " : question_id,"choice_id " : choice_id});
+
     this.question[this.index] = question_id;
     this.choice[this.index] = choice_id;
 
@@ -71,20 +77,27 @@ export class QuizComponent implements OnInit {
     let k=0;
     let size = this.question.length;
 
+    console.log(this.question);
+
     for(var i=0;i<size;i++)
     {
         for(var j=i+1;j<size;j++)
         {
             if(this.question[i]==this.question[j] && this.question[i]!= -1)
             {
+              console.log(this.question[i]);
+              console.log(this.question[j]);
                 count++;
                 last = j;
             }
         }
         if(count==0)
         {
+          console.log(this.question[i]);
           if(this.question[i]!=-1)
           {
+            console.log(this.question[i]);
+            console.log(this.choice[i]);
             this.final_question[k] = this.question[i];
             this.final_choice[k] = this.choice[i];
             this.question[i]=-1;
@@ -103,6 +116,14 @@ export class QuizComponent implements OnInit {
         last = 0;
         count = 0;
     }
+
+    console.log("-------------------------");
+
+    console.log(this.final_question);
+    console.log(this.final_choice);
+    console.log(this.quiz_data);
+
+    console.log("-------------------------");
 
     localStorage.setItem("question",JSON.stringify(this.final_question));
     localStorage.setItem("choice",JSON.stringify(this.final_choice));

@@ -50,6 +50,8 @@ export class QuizService {
 
   getQuizData(course : any , topic : any)
   {
+    console.log("inside service");
+    
     this.data = {"course" : course , "topic" : topic};
 
     console.log('Quiz Service')
@@ -57,7 +59,20 @@ export class QuizService {
     this.loadToken();
     headers.append('Authorization',this.authToken);
     headers.append('Content-Type','application/json');
-    return this.http.post('http://localhost:3000/question/getAllQuestions',(this.data),{headers : headers})
+    return this.http.post('http://localhost:3000/question/getAllQuestionsByData',(this.data),{headers : headers})
+    .map(res => {
+      return res.json();
+    })
+  }
+
+  getArticleByWrongQuestion(list : any)
+  {    
+    console.log('Quiz Service')
+    let headers = new Headers();
+    this.loadToken();
+    headers.append('Authorization',this.authToken);
+    headers.append('Content-Type','application/json');
+    return this.http.post('http://localhost:3000/article/getArticleByWrongQuestion',({"data" : list}),{headers : headers})
     .map(res => {
       return res.json();
     })

@@ -5,53 +5,152 @@ const config = require('../config/database');
 //Course Schema
 
 const CourseSchema = mongoose.Schema({
-    _id : { type : Number,auto: true}, 
+    _id: { type: Number, auto: true },
     Course_Name: {
         type: String,
         required: true
     },
     Topics: [{
-        _id : { type : Number,auto: true}, 
+        _id: { type: Number, auto: true },
         Topic_Name: {
             type: String,
             required: true
         },
-        SubTopics: [ {
-            _id : { type : Number,auto: true}, 
+        SubTopics: [{
+            _id: { type: Number, auto: true },
             Sub_Topic_Name: {
+                type: String,
+                required: true
+            },
+            Link: {
                 type: String,
                 required: true
             }
         }]
     }]
-},{_id: false});
+}, { _id: false });
 
 const Course = module.exports = mongoose.model('Course', CourseSchema);
 
-//--- Add New Course ----
+//============================== Add New Course =========================
 
-module.exports.addCourse = function(newCourse,callback){
+module.exports.addCourse = function (newCourse, callback) {
     newCourse.save(callback);
 }
 
+//============================= Add New Crawling Topics =======================
+
+module.exports.add_Crawl_Topics = function (name, data, callback) {
+
+    Course.find({ Course_Name: name }, function (err, data_result) {
+
+        list = [temp_Topics];
+
+        var db_topic_count = 0, topic_count = 0;
+
+        // ------ course_exit, get total number of topics current ------
+
+        db_topic_count = data_result[0].Topics.length;
+
+        topic_count = db_topic_count;
+
+        for (var i = 0; i < data.length; i++) {
+
+            if (data[i].id < 100)       // ------ JAVATPOINT ------
+            {
+                var temp_Topics = {
+                    _id: Number,
+                    Topic_Name: String,
+                    SubTopics: [temp_Sub_Topic]
+                };
+
+                for (var j = 0; j < data[i].list.length; j++) {
+                    var temp_Sub_Topic = { _id: Number, Sub_Topic_Name: String, Link: String };
+
+                    temp_Sub_Topic._id = j + 1;
+                    temp_Sub_Topic.Sub_Topic_Name = data[i].list[j].sub.sub_heading.replace(/^"(.*)"$/, '$1');
+                    temp_Sub_Topic.Sub_Topic_Name = temp_Sub_Topic.Sub_Topic_Name.replace(/^\n(.*)\n$/, '$1');
+                    temp_Sub_Topic.Link = JSON.stringify(data[i].list[j].sub.link);
+
+                    temp_Topics.SubTopics[j] = temp_Sub_Topic;
+                }
+                temp_Topics._id = ++db_topic_count;
+                temp_Topics.Topic_Name = data[i].name;
+
+                list[i] = temp_Topics;
+                temp_Topics = null;
+            }
+            else                       // ----- TUTORIAL POINT ------
+            {
+                var temp_Topics = {
+                    _id: Number,
+                    Topic_Name: String,
+                    SubTopics: [temp_Sub_Topic]
+                };
+
+                for (var j = 0; j < data[i].list.link.length; j++) {
+
+                    var temp_Sub_Topic = { _id: Number, Sub_Topic_Name: String, Link: String };
+
+                    temp_Sub_Topic._id = j + 1;
+                    temp_Sub_Topic.Sub_Topic_Name = data[i].list.sub_heading[j].replace(/^"(.*)"$/, '$1');
+                    temp_Sub_Topic.Sub_Topic_Name = temp_Sub_Topic.Sub_Topic_Name.replace(/^\n(.*)\n$/, '$1');
+                    temp_Sub_Topic.Link = data[i].list.link[j];
+
+                    temp_Topics.SubTopics[j] = temp_Sub_Topic;
+                }
+                temp_Topics._id = ++db_topic_count;
+                temp_Topics.Topic_Name = data[i].name.replace(/^"(.*)"$/, '$1');
+                temp_Topics.Topic_Name = temp_Topics.Topic_Name.replace(/^\n(.*)\n$/, '$1');
+                list[i] = temp_Topics;
+            }
+        }
+
+        // ------------ Check For Duplication Topics -----------
+
+        for (var i = 0; i < list.length; i++) {
+            for (var j = 0; j < data_result[0].Topics.length; j++) {
+                if (data_result[0].Topics[j].Topic_Name == list[i].Topic_Name) {
+                    list[i] = null;
+                    j = data_result[0].Topics.length;
+                }
+            }
+        }
+
+        // -------- Get total number of topics in specific course -------
+
+        for (var i = 0; i < list.length; i++) {
+            if (list[i] != null) {
+                Course.findOneAndUpdate({ Course_Name: name }, { $push: { Topics: list[i] } }, function (err, ress) {
+                    if (err)
+                        console.log(err);
+                    else
+                        console.log("topics are added");
+                });
+            }
+            else {
+                console.log("Already Exist");
+            }
+        }
+    });
+}
+
+
 //--- Add New Topics ----
 
-module.exports.addTopics = function(data,callback){
+module.exports.addTopics = function (data, callback) {
     //newCourse.save(callback);
 
-    var node  = [{Topic_Name : String, SubTopics : [{ Sub_Topic_Name : String}]}];
+    var node = [{ Topic_Name: String, SubTopics: [{ Sub_Topic_Name: String }] }];
 
     list_of_sub_headings = [];
 
-    for(var i=0;i<data.length;i++)
-    {
-        if(data[i].length==4)
-        {
+    for (var i = 0; i < data.length; i++) {
+        if (data[i].length == 4) {
             var names = data[i][0];
             var sub_headings = data[i][1].sub.sub_heading;
         }
-        if(data[i].length==3)
-        {
+        if (data[i].length == 3) {
 
         }
     }
@@ -61,7 +160,7 @@ module.exports.addTopics = function(data,callback){
 //--- Get All Course ----
 
 module.exports.getAllCourse = function (callback) {
-    Course.find({},['Course_Name','Topics'],callback);
+    Course.find({}, ['Course_Name', 'Topics'], callback);
 }
 
 //---------------------------- OLD CODE ---------------------

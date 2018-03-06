@@ -3,6 +3,7 @@ import { ModifyTopicService } from '../../services/modify-topic.service';
 import { CourseService } from '../../services/course.service';
 import { Router } from '@angular/router';
 import { FlashMessagesService } from 'angular2-flash-messages';
+import * as $ from "jquery";
 
 @Component({
   selector: 'app-modify-topic',
@@ -37,11 +38,13 @@ export class ModifyTopicComponent implements OnInit {
   ngOnInit() {
   }
 
+  // ------------- For Options -----------
+
   Filter(value: any) {
     if (value == "Add Topic") {
       this.option = 0;
-      this.AddTopics(this.course_name);
-      this.AddTopics2(this.course_name);
+      this.Show_Topics_Left(this.course_name);
+      this.Show_Topics_Right(this.course_name);
     }
     else if (value == "Edit Topics") {
       this.option = 1;
@@ -50,6 +53,8 @@ export class ModifyTopicComponent implements OnInit {
       this.option = -1;
     }
   }
+
+  // ---------------- For Left Topics List Selection ---------------
 
   Filter_Selection(value: any) {
     if (this.count % 2 == 0) {
@@ -62,6 +67,8 @@ export class ModifyTopicComponent implements OnInit {
     }
     this.count++;
   }
+
+  // ---------------- For Right Topics List Selection ---------------
 
   Filter_Selection2(value: any) {
     var che = 100 + value;
@@ -76,8 +83,10 @@ export class ModifyTopicComponent implements OnInit {
     this.count2++;
   }
 
-  AddTopics(values: any) {
-    this.modifyTopicService.addTopics_with_subTopics(values).subscribe(data => {
+  // ----------------- Crawling For Left Topics List ---------------
+
+  Show_Topics_Left(values: any) {
+    this.modifyTopicService.Show_Topics_with_subTopics_Left(values).subscribe(data => {
       if (data.success) {
         this.topics = data.data;
         this.SaveDataInJason();
@@ -89,8 +98,10 @@ export class ModifyTopicComponent implements OnInit {
     });
   }
 
-  AddTopics2(values: any) {
-    this.modifyTopicService.addTopics_with_subTopics2(values).subscribe(data => {
+  // ----------------- Crawling For Right Topics List ---------------
+
+  Show_Topics_Right(values: any) {
+    this.modifyTopicService.Show_Topics_with_subTopics_Right(values).subscribe(data => {
       if (data.success) {
         this.second_website = data.data;
         this.SaveDataInJason2();
@@ -101,6 +112,8 @@ export class ModifyTopicComponent implements OnInit {
       }
     });
   }
+
+  // ----------------- Format Data Of Left Topics List ---------------
 
   SaveDataInJason() {
     for (var i = 0; i < this.topics.length; i++) {
@@ -123,6 +136,7 @@ export class ModifyTopicComponent implements OnInit {
           k++;
         }
         k = 0;
+
         this.array_of_topic[i] = { name, data };
         name = null;
         data = [];
@@ -139,6 +153,8 @@ export class ModifyTopicComponent implements OnInit {
       j = j + 1;
     }
   }
+
+  // ----------------- Format Data Of Right Topics List ---------------
 
   SaveDataInJason2() {
     var data = [];
@@ -172,6 +188,8 @@ export class ModifyTopicComponent implements OnInit {
     this.second_website2 = data;
   }
 
+// ---------------------- Add Selected Topics in Database ------------
+
   AddTopic() {
     var data_list = [];
     var ids = [];
@@ -182,34 +200,34 @@ export class ModifyTopicComponent implements OnInit {
 
         if (ids[i] < 100 && ids[i] != undefined) {
           //--------- JavaTpoint --------
+          var id = ids[i];
           var name = this.array_of_topic2[ids[i]].name;
           var list = this.array_of_topic2[ids[i]].data;
-          data_list[i] = { name, list };
+          data_list[i] = { id,name, list };
         }
         else {
           //--------- Tutorial Point -------
+            var id = ids[i];
             var name = this.second_website2[ids[i]-100].name;
             var list = this.second_website2[ids[i]-100].sub;
-            data_list[i] = { name, list };
+            data_list[i] = {id, name, list };
         }
 
       }
-      console.log(data_list);
-      localStorage.setItem("Admin_Topics",JSON.stringify(data_list));
+      
+  this.courseService.add_Crawl_Topics(this.course_name,data_list).subscribe(data=>{
+          if(data.success)
+              {
+                this.flashMessgae.show("Your Topics are Add",{cssClass : 'alert-success', timeout : 2000});    
+                //this.router.navigate(['/login']);
+              }
+              else
+              {
+                this.flashMessgae.show("Something went Wrong",{cssClass : 'alert-danger', timeout : 2000});    
+                //this.router.navigate(['/register']);
+              }
+        });
 
-      this.router.navigate(['/dashboard']);
-      // this.courseService.addTopicsData(data_list).subscribe(data=>{
-      //     if(data.success)
-      //         {
-      //           this.flashMessgae.show("Your Topics are Add",{cssClass : 'alert-success', timeout : 2000});    
-      //           //this.router.navigate(['/login']);
-      //         }
-      //         else
-      //         {
-      //           this.flashMessgae.show("Something went Wrong",{cssClass : 'alert-danger', timeout : 2000});    
-      //           //this.router.navigate(['/register']);
-      //         }
-      //   });
     }
     else {
       this.flashMessgae.show("Wrong,Must be Selected", { cssClass: 'alert-danger', timeout: 3000 });

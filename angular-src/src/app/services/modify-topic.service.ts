@@ -16,14 +16,14 @@ export class ModifyTopicService {
     this.authToken = token;
     }
   
-    addTopics_with_subTopics(value : any)
+    Show_Topics_with_subTopics_Left(value : any)
     {
       let headers = new Headers();
       this.loadToken();
       headers.append('Authorization',this.authToken);
       headers.append('Content-Type','application/json');
       console.log("service")
-      return this.http.get('http://localhost:3000/modify-topic/Add_Topics',{headers : headers})
+      return this.http.get('http://localhost:3000/modify-topic/Show_Topics_Left',{headers : headers})
       .map(res => {
         
         console.log("Topics service");
@@ -32,14 +32,14 @@ export class ModifyTopicService {
       })
     }
 
-    addTopics_with_subTopics2(value : any)
+    Show_Topics_with_subTopics_Right(value : any)
     {
       let headers = new Headers();
       this.loadToken();
       headers.append('Authorization',this.authToken);
       headers.append('Content-Type','application/json');
       console.log("service")
-      return this.http.get('http://localhost:3000/modify-topic/Add_Topics2',{headers : headers})
+      return this.http.get('http://localhost:3000/modify-topic/Show_Topics_Right',{headers : headers})
       .map(res => {
         
         console.log("Topics service");

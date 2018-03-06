@@ -1,4 +1,4 @@
-<form *ngIf="usertype" name ="candidate" (submit)=StartQuiz()>
+<form *ngIf="usertype" name="candidate" (submit)=StartQuiz()>
   <div *ngIf="course_List" class="form-control main">
 
     <h1 class="page-header">Courses</h1>
@@ -7,7 +7,7 @@
     <br/>
 
     <select (change)="onSelectCourse()" [(ngModel)]="selected_course" class="form-control list" name="something">
-      <option value = "0" label = "Select One Course"></option>
+      <option value="0" label="Select One Course"></option>
       <option *ngFor="let course of course_List" class="list form-control">
         {{ course.Course_Name }}
       </option>
@@ -17,7 +17,7 @@
     <br/>
 
     <select (change)="onSelectTopic()" [(ngModel)]="selected_topic" class="form-control list" name="something">
-      <option value = "0" label = "Select One Topic"></option>
+      <option value="0" label="Select One Topic"></option>
       <option *ngFor="let topic of topic_List" class="list form-control">
         {{topic.Topic_Name}}
       </option>
@@ -27,17 +27,18 @@
     <br/>
 
     <input type="submit" class="btn btn-primary" value="Start" name="something" />
-    
+
     <br/>
     <br/>
   </div>
 </form>
 
 <div>
-    <div *ngIf="!usertype">
-            <button class="admin_panel_box btn">Modify Course</button>
-            <button class="admin_panel_box btn" click="call_modify_topic()">Modify Topics</button>
-            <button class="admin_panel_box btn">Modify Questions</button>
-      
-    </div>
+  <div *ngIf="!usertype">
+
+    <button id="modify_question" class="admin_panel_box btn" (click)="on_Modify($event)">Modify Questions</button>
+    <button id="modify_topic" class="admin_panel_box btn" (click)="on_Modify($event)">Modify Topics</button>
+    <button id="modify_course" class="admin_panel_box btn" (click)="on_Modify($event)">Modify Course</button>
+
+  </div>
 </div>

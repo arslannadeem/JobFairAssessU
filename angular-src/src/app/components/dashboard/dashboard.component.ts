@@ -88,10 +88,20 @@ export class DashboardComponent implements OnInit {
   }
 
   // ----------------- For Admin Panel --------------
-
-  call_modify_topic()
-  {
-    this.router.navigate(['modify-topic']);
-  }  
+  
+  on_Modify(event) {
+    if(event.target.id == "modify_question")
+    {
+      this.router.navigate(['/modify-question']);
+    }
+    else if(event.target.id == "modify_topic")
+    {
+      this.router.navigate(['/modify-topic']);
+    }
+    else if(event.target.id == "modify_course")
+    {
+      //this.router.navigate(['/modify-course']);
+    }
+  }
   
 }
