@@ -10,12 +10,12 @@ const config = require('./config/database');
 mongoose.connect(config.database);
 
 // On Connection
-mongoose.connection.on('connected',()=> {
+mongoose.connection.on('connected', () => {
     console.log('Connected to Database' + config.database);
 });
 
 // On Error
-mongoose.connection.on('error',(err)=> {
+mongoose.connection.on('error', (err) => {
     console.log('Database error' + err);
 });
 
@@ -38,7 +38,7 @@ const port = 3000;
 app.use(cors());
 
 // Set Static Folder
-app.use(express.static(path.join(__dirname,'public')));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Body Parser Middleware 
 app.use(bodyParser.json());
@@ -49,18 +49,19 @@ app.use(passport.session());
 
 require('./config/passport')(passport);
 
-app.use('/users',users);
-app.use('/course',course);
-app.use('/question',quiz);
-app.use('/article',article);
-app.use('/modify-topic',crawl);
+app.use('/users', users);
+app.use('/course', course);
+app.use('/question', quiz);
+app.use('/article', article);
+app.use('/modify-topic', crawl);
+app.use('/modify-question', crawl);
 
 // Index Route
-app.get('/',(req,res)=> {
+app.get('/', (req, res) => {
     res.send("Invalid Endpoint");
 });
 
 // Start Server
-app.listen(port,() => {
+app.listen(port, () => {
     console.log("Server started on port " + port);
 });

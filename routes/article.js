@@ -33,23 +33,14 @@ router.post('/New_Article', (req, res, next) => {
 });
 
 router.post('/getArticleByWrongQuestion', (req, res, next) => {
-
-    var temp_Level = req.body.data.Level;
-    var tempTopics = req.body.data.Topic_Name;
-    var tempSubTopics = req.body.data.Sub_Topic_Name;
-
-    console.log(req.body.data);
-
-    let Article_data = {
-        "Topics": tempTopics, "Level": temp_Level, "Sub_Topics" : tempSubTopics
-    };
-
-    Article.ArticleResult(Article_data, (err, article) => {
+    console.log("routes");
+    Article.ArticleResult(req.body.data, (err, article) => {
         if (err) {
-            res.json({ success: false, msg: 'Failed to Add New Article' });
+            console.log(err);
+            res.json({ success: false, msg: 'Failed to Search Article' });
         }
         else {
-            res.json({ success: true, msg: 'Article Added' });
+            res.json({ success: true, msg: 'Articles Get Sucessfully', "articles": article });
         }
     });
 });

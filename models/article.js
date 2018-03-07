@@ -58,7 +58,7 @@ module.exports.addArticle = function (newArticle, callback) {
                 Description: newArticle.Head[temp_sub_heading_id[j]] + newArticle.Para[temp_sub_heading_id[j]],
                 Article_Level: temp_level,
                 Topic_Name: newArticle.Topics[0].itemName.replace(/^"(.*)"$/, '$1'),
-                Sub_Topic_Name: newArticle.Sub_Topic_Heading[temp_sub_heading_id[j]]
+                Sub_Topic_Name: newArticle.Sub_Topic_Heading[temp_sub_heading_id[j]].replace(/^"(.*)"$/, '$1')
             });
             list_of_article[j] = obj_article;
         }
@@ -66,7 +66,7 @@ module.exports.addArticle = function (newArticle, callback) {
     });
 }
 
-// -------------- 
+// -------------- Getting Articles with respect to wrong question --------------
 
 module.exports.ArticleResult = function (newArticle, callback) {
 
@@ -74,25 +74,49 @@ module.exports.ArticleResult = function (newArticle, callback) {
     temp_sub_topics = [];
     temp_level = [];
 
-    for(var i=0;i<newArticle.length;i++)
-    {
-        this.temp_level[i] = newArticle[i].Level;
-        this.temp_topics[i] = newArticle[i].Topic_Name;
-        this.temp_sub_topics[i] = newArticle[i].Level;
+    for (var i = 0; i < newArticle.length; i++) {
+        temp_level[i] = newArticle[i].Level;
+        temp_topics[i] = newArticle[i].Topic_Name;
+        temp_sub_topics[i] = newArticle[i].Sub_Topic_Name;
     }
 
-    console.log(req.body.data);
+    var temp_articles = [];
+    var errr;
 
-    let Article_data = {
-        "Topics": tempTopics, "Level": temp_Level, "Sub_Topics" : tempSubTopics
-    };
+    Article.find({}).exec(function (err, results) {
+        console.log("execute query");
+        if (err) {
+            console.log(err);
+            throw err;
+        }
+        else {
+            found_article = false;
 
-    // "Topics" : tempTopics, "Level": temp_Level, "Sub_Topics" : tempSubTopics
+            console.log(results);
 
-    var temp_level = [];
-
-    for (var i = 0; i < newArticle.Level.length; i++) {
-        temp_level[i] = newArticle.Level[i].itemName;
-    }
-
+            for (var i = 0; i < newArticle.length; i++) {
+                for (var j = 0; j < temp_sub_topics[i].length; j++) {
+                    for (var k = 0; k < results.length; k++) {
+                        if (temp_sub_topics[i][j] == results[k].Sub_Topic_Name
+                            && temp_topics[i] == results[k].Topic_Name) {
+                            // check sub topic and topic names
+                            for (var l = 0; l < temp_level[i].length; l++) {
+                                if (temp_level[i][l] == results[k].Article_Level[l]) {
+                                    found_article = true;
+                                    l = temp_level[i].length;
+                                }
+                            }
+                            if (found_article) {
+                                console.log("found");
+                                temp_articles.push(results[k]);
+                                found_article = false;
+                            }
+                        }
+                    }
+                }
+            }
+            console.log(temp_articles);
+            callback(null, temp_articles);
+        }
+    });
 }

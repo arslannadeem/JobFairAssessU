@@ -1,15 +1,30 @@
 <form>
-  <br/>
-  <h2> Results</h2>
-  <br/>
-  <div *ngFor="let question of data;let ind=index" id={{100+ind}}>
-      {{ind+1}} - {{ question.Description }}
-      <div *ngFor="let choice of question.Choices;let inde = index" id={{inde}} class={{ind}}>
-              {{inde + 1}} - {{choice.Description}}
-       </div>
-   <br/>
-   </div>
-   {{ResultsHighlights().call()}}
-   <br/>
 
+    <div *ngIf="!view">
+        <br/>
+        <h2> Results</h2>
+        <br/>
+        <div *ngFor="let question of data;let ind=index" id={{100+ind}}>
+            {{ind+1}} - {{ question.Description }}
+            <div *ngFor="let choice of question.Choices;let inde = index" id={{inde}} class={{ind}}>
+                {{inde + 1}} - {{choice.Description}}
+            </div>
+            <br/>
+        </div>
+        {{ResultsHighlights().call()}}
+        <br/>
+        <button type="button" (click)="ShowArticles()" class="btn btn-primary"> View Result</button>
+    </div>
+
+    <div *ngIf="view">
+        <br/>
+        <h2> Wrong Question Description </h2>
+        <br/>
+        <div *ngFor="let descp of View_result_array;let inde = index">
+            
+                {{inde + 1}} - {{descp.Question}}
+                <br>
+                {{descp.Description}}
+        </div>
+    </div>
 </form>
