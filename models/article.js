@@ -62,7 +62,35 @@ module.exports.addArticle = function (newArticle, callback) {
             });
             list_of_article[j] = obj_article;
         }
-        Article.insertMany(list_of_article, callback);
+
+        // ------ if already exist then not add -----------
+
+        final_list_of_unique_articles = [];
+
+        found = false;
+
+        Article.find({}).exec(function (err, all_list) {
+            for (var i = 0, k = 0; i < list_of_article.length; i++) {
+                for (var j = 0; j < all_list.length; j++) {
+                    if (list_of_article[i].Topic_Name == all_list[j].Topic_Name &&
+                        list_of_article[i].Sub_Topic_Name == all_list[j].Sub_Topic_Name) {
+                        found = true;
+                        j = all_list.length;
+                    }
+                }
+                if (!found) {   // -- if article is not exit
+                    final_list_of_unique_articles[k] = list_of_article[i];
+                    console.log("article is not exit");
+                }
+                else {          // -- if article is exit 
+                    found = false;
+                    console.log("article is exit");
+                }
+            }
+        });
+
+        //--------  Add list of articles ---------
+        Article.insertMany(final_list_of_unique_articles, callback);
     });
 }
 
@@ -92,8 +120,6 @@ module.exports.ArticleResult = function (newArticle, callback) {
         else {
             found_article = false;
 
-            console.log(results);
-
             for (var i = 0; i < newArticle.length; i++) {
                 for (var j = 0; j < temp_sub_topics[i].length; j++) {
                     for (var k = 0; k < results.length; k++) {
@@ -115,7 +141,6 @@ module.exports.ArticleResult = function (newArticle, callback) {
                     }
                 }
             }
-            console.log(temp_articles);
             callback(null, temp_articles);
         }
     });
