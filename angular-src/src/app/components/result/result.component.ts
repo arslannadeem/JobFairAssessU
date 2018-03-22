@@ -16,7 +16,8 @@ export class ResultComponent implements OnInit {
 
   wrong_question = [];
 
-  constructor(private router: Router,private quizService : QuizService, private flashMessgae: FlashMessagesService) { }
+  constructor(private router: Router,private quizService : QuizService, private flashMessgae: FlashMessagesService) 
+  {}
 
   final_list_of_articles = [];
   View_result_array = [];
@@ -26,6 +27,8 @@ export class ResultComponent implements OnInit {
     this.questions = JSON.parse(localStorage.getItem("question"));
     this.choices = JSON.parse(localStorage.getItem("choice"));
     this.data = JSON.parse(localStorage.getItem("data"));
+
+    // this.ResultsHighlights();
   }
 
   ResultsHighlights() {
@@ -44,7 +47,8 @@ export class ResultComponent implements OnInit {
 
       if (this.choices[j] == index) {
         console.log("Question true");
-
+        console.log(j);
+        console.log(index);
         var statement = document.getElementById(String(100 + j));
         statement.getElementsByClassName(String(j))[index].setAttribute("class", "correct");
         index = -1;

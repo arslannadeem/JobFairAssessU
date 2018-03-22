@@ -11,9 +11,12 @@
             </div>
             <br/>
         </div>
-        {{ResultsHighlights().call()}}
+        <div>   {{ResultsHighlights()}}     </div>
+        
+        <!-- <div data-ng-controller="ResultComponent" data-ng-init="ResultsHighlights()"></div> -->
         <br/>
         <button type="button" (click)="ShowArticles()" class="btn btn-primary"> View Result</button>
+        <!-- <div ng-init="ResultsHighlights()"></div> -->
     </div>
 
     <div *ngIf="view">
@@ -24,7 +27,8 @@
             
                 {{inde + 1}} - {{descp.Question}}
                 <br>
-                {{descp.Description}}
+                
+                <div innerHtml={{descp.Description}}></div>
         </div>
     </div>
 </form>
