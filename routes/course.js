@@ -85,16 +85,29 @@ router.post('/add_Crawl_Topics',(req,res,next)=>{
 
 // ==========================  GET All Course  =========================
 
+
 router.get('/getAllCourses', passport.authenticate('jwt', { session: false }),function(req, res)
 {   
+
+    
+
+    try{
+    console.log("in course route");
     Course.getAllCourse((err,list)=>{
         if(err) throw err;
         if(!list){
             return res.json({success:false,msg : 'Courses not found'});
         }
+        console.log("After get course list");
+        console.log(list);
         var return_obj = { 'success' : true , 'data' : list};
         return res.json(return_obj);
     });
+}
+catch(error){
+    var return_obj = { 'success' : true};
+    res.json(return_obj);
+}
 });
 
 /*

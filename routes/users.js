@@ -6,7 +6,7 @@ var jwt = require('jsonwebtoken');
 const config = require('../config/database');
 
 // Register
-router.post('/register', (req, res, next) => {
+router.post('/register', (req, res) => {
     let newUser = new User({
         name: req.body.name,
         email: req.body.email,
@@ -27,7 +27,7 @@ router.post('/register', (req, res, next) => {
 });
 
 // Authenticate
-router.post('/authenticate', (req, res, next) => {
+router.post('/authenticate', (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
     const type = req.body.type;
@@ -45,15 +45,15 @@ router.post('/authenticate', (req, res, next) => {
                 return res.json({ success: false, msg: 'User not found' });
             }
             User.comparePassword(password, user.password, (err, isMatch) => {
-                //console.log(user.password);
-                //console.log(user.username);
                 if (err) throw err;
                 if (isMatch) {
+
                     const token = jwt.sign({ _id: user._id.toHexString() }, config.secret, { expiresIn: 604000 }).toString();
 
+                    
+                    console.log("authenticate sucess");
                     res.json({
                         success: true,
-
                         token: 'JWT ' + token,
                         user: {
                             id: user._id,
@@ -63,8 +63,11 @@ router.post('/authenticate', (req, res, next) => {
                             type: user.type
                         }
                     });
+                    console.log("response send");
+                    res.end();
                 } else {
-                    return res.json({ success: false, msg: "Wrong Password" });
+                    res.json({ success: false, msg: "Wrong Password" });
+                    res.end();
                 }
             });
         });
@@ -77,10 +80,5 @@ router.post('/authenticate', (req, res, next) => {
 router.get('/profile', passport.authenticate('jwt', { session: false }), function (req, res) {
     return res.json({ user: req.user });
 });
-
-// // Register
-// router.get('/validate',(req,res,next)=>{
-//     res.send("VALIDATE");
-// });
 
 module.exports = router;

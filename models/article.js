@@ -112,7 +112,6 @@ module.exports.ArticleResult = function (newArticle, callback) {
     var errr;
 
     Article.find({}).exec(function (err, results) {
-        console.log("execute query");
         if (err) {
             console.log(err);
             throw err;
@@ -123,9 +122,14 @@ module.exports.ArticleResult = function (newArticle, callback) {
             for (var i = 0; i < newArticle.length; i++) {
                 for (var j = 0; j < temp_sub_topics[i].length; j++) {
                     for (var k = 0; k < results.length; k++) {
-                        if (temp_sub_topics[i][j] == results[k].Sub_Topic_Name
-                            && temp_topics[i] == results[k].Topic_Name) {
+                        if (temp_sub_topics[i][j] == results[k].Sub_Topic_Name.replace(/^"(.*)"$/, '$1')
+                            && temp_topics[i].replace(/^"(.*)"$/, '$1') == results[k].Topic_Name.replace(/^"(.*)"$/, '$1')) {
+                            
                             // check sub topic and topic names
+                            
+                            results[k].Topic_Name = results[k].Topic_Name.replace(/^"(.*)"$/, '$1');
+                            results[k].Sub_Topic_Name = results[k].Sub_Topic_Name.replace(/^"(.*)"$/, '$1');
+                            
                             for (var l = 0; l < temp_level[i].length; l++) {
                                 if (temp_level[i][l] == results[k].Article_Level[l]) {
                                     found_article = true;

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { QuizService } from '../../services/quiz.service';
 import { FlashMessagesService } from 'angular2-flash-messages';
@@ -15,25 +15,30 @@ export class ResultComponent implements OnInit {
   data: any;
 
   wrong_question = [];
+  final_question_of_artices = [];
 
   constructor(private router: Router,private quizService : QuizService, private flashMessgae: FlashMessagesService) 
   {}
 
+  ngAfterViewInit() {
+    this.ResultsHighlights();
+  }
+
   final_list_of_articles = [];
+  final_articles = [];
   View_result_array = [];
   view = false;
+  show_data = [];
 
   ngOnInit() {
     this.questions = JSON.parse(localStorage.getItem("question"));
     this.choices = JSON.parse(localStorage.getItem("choice"));
     this.data = JSON.parse(localStorage.getItem("data"));
-
-    // this.ResultsHighlights();
   }
 
   ResultsHighlights() {
     
-    for (var j = 0; j < this.data.length; j++) {
+    for  (var j = 0; j < this.data.length; j++) {
       var question = document.getElementById(String(100 + j));
       var choice = question.getElementsByTagName("div");
 
@@ -47,10 +52,8 @@ export class ResultComponent implements OnInit {
 
       if (this.choices[j] == index) {
         console.log("Question true");
-        console.log(j);
-        console.log(index);
         var statement = document.getElementById(String(100 + j));
-        statement.getElementsByClassName(String(j))[index].setAttribute("class", "correct");
+        statement.getElementsByClassName(String(j))[index].className += " " + 'correct';
         index = -1;
       }
       else {
@@ -61,10 +64,8 @@ export class ResultComponent implements OnInit {
           this.wrong_question.push(this.questions[j]);
 
           var statement = document.getElementById(String(100 + j));
-          statement.getElementsByClassName(String(j))[this.choices[j]].setAttribute("class", "wrong");
-
-          var statement1 = document.getElementById(String(100 + j));
-          statement1.getElementsByClassName(String(j))[index - 1].setAttribute("class", "correct_with_wrong");
+          statement.getElementsByClassName(String(j))[this.choices[j]].className += " " + 'wrong';
+          statement.getElementsByClassName(String(j))[index].className += " " + 'correct_with_wrong';
           index = -1;
         }
       }
@@ -90,9 +91,14 @@ export class ResultComponent implements OnInit {
           {
             for(var j=i+1;j<list.length;j++)
             {
-              if(list[j]._id!=-1 && list[i]._id!=-1 && list[i]._id==list[j]._id)
+              if(list[i].Topic_Name==list[j].Topic_Name && list[i].Sub_Topic_Name==list[j].Sub_Topic_Name
+              && list[i].Description==list[j].Description)
               {
-                list[j]._id=-1;
+                if(list[j]._id!=-1 && list[i]._id!=-1)
+                {
+                  // if(list[i]._id == list[j]._id)
+                    list[j]._id=-1;
+                }
               }
             }
           }
@@ -108,7 +114,26 @@ export class ResultComponent implements OnInit {
             }
           }
 
-          console.log("articles : ",this.final_list_of_articles);
+          var find = false;
+          var l=0;
+          
+          var final_articles = [];
+          for(var i=0;i<select_question.length;i++)
+          {
+              //select_question[i] = this.data[this.wrong_question[i]];
+              for(var j=0;j<select_question[i].Sub_Topic_Name.length;j++)
+              {
+                  for(var k=0;k<this.final_list_of_articles.length;k++)
+                  {
+                    if(select_question[i].Sub_Topic_Name[j]==this.final_list_of_articles[k].Sub_Topic_Name)
+                    {
+                      final_articles.push(this.final_list_of_articles[k].Description);
+                    }
+                  }
+              }
+              this.final_question_of_artices.push(final_articles);
+              final_articles = [];
+          }
 
           this.flashMessgae.show("Topcis Shows", { cssClass: 'alert-success', timeout: 3000 });
         }
@@ -121,53 +146,11 @@ export class ResultComponent implements OnInit {
 
   ShowArticles()
   {
-    console.log("call");
       this.view = true;
 
-      // ----- if duplicate articles then remove it --------
-
-      var temp_question_no = [];
-      var temp_list = this.wrong_question;
-      
-      for(var i=0;i<temp_list.length-1;i++)
+      for(var i=0;i<this.final_question_of_artices.length;i++)
       {
-        for(var j=i+1;j<temp_list.length;j++)
-        {
-          if(temp_list[j]!=-1 && temp_list[i]!=-1 && temp_list[i]==temp_list[j])
-          {
-            temp_list[j]=-1;
-          }
-        }
+          this.View_result_array[i] = {"Question":this.data[this.questions[i]].Description,"Description": String(this.final_question_of_artices[i]) };
       }
-
-      // ----------- save it other array -------
-          
-      for(var i=0,j=0;i<temp_list.length-1;i++)
-      {
-        if(temp_list[i]!=-1)
-        {
-          temp_question_no[j]=temp_list[i];
-          j++;
-        }
-      }
-
-      console.log("question number list : " , temp_question_no);
-      //---------------------
-
-      for(var i=0,k=0;i<temp_question_no.length;i++)
-      {
-          for(var j=0;j<this.final_list_of_articles.length;j++)
-          {
-            if(this.data[temp_question_no[i]].Sub_Topic_Name == this.final_list_of_articles[j].Sub_Topic_Name
-            && this.data[temp_question_no[i]].Topic_Name == this.final_list_of_articles[j].Topic_Name)
-            {
-              this.View_result_array[k]={"Question":this.data[this.questions[i]].Description,"Description": String(this.final_list_of_articles[j].Description) };
-              k++;
-            }
-          }
-      }
-
-      console.log(this.View_result_array);
   }
-
 }

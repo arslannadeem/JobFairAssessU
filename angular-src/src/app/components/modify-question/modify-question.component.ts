@@ -25,7 +25,7 @@ export class ModifyQuestionComponent implements OnInit {
   Sub_Topic_Heading = [];
 
   question: any;
-  opt : any = [];
+  opt: any = [];
   course_topic: any;
   topics: any = [];
   sub_Topics: any = [];
@@ -154,10 +154,10 @@ export class ModifyQuestionComponent implements OnInit {
 
   }
 
-  public saveChoice:boolean;
-  
-  public onSaveChoiceChanged(value:boolean){
-      this.saveChoice = value;
+  public saveChoice: boolean;
+
+  public onSaveChoiceChanged(value: boolean) {
+    this.saveChoice = value;
   }
 
   // ================ FOR LEVEL =============
@@ -282,14 +282,12 @@ export class ModifyQuestionComponent implements OnInit {
   nextProceed() {
     this.next = true;
 
-    var j=0;
-    for(var i=0;i<this.choices.length;i++)
-    {
-      if($("#saveChoiceCheckBox"+i).prop('checked')==true)
-        {
-          this.opt[j]=i+1;
-          j++;
-        }
+    var j = 0;
+    for (var i = 0; i < this.choices.length; i++) {
+      if ($("#saveChoiceCheckBox" + i).prop('checked') == true) {
+        this.opt[j] = i + 1;
+        j++;
+      }
     }
 
     console.log(this.opt);
@@ -325,7 +323,7 @@ export class ModifyQuestionComponent implements OnInit {
           for (var k = 0; k < this.topics_data[i].SubTopics.length; k++) {
             if (this.topics_data[i].SubTopics[k].Sub_Topic_Name == this.subtopics_selectedItems[j].itemName) {
               var str = this.topics_data[i].SubTopics[k].Link;
-              this.links[l] = { "link" : str.replace(/^"(.*)"$/, '$1'), "SubTopic" : this.subtopics_selectedItems[j].itemName};
+              this.links[l] = { "link": str.replace(/^"(.*)"$/, '$1'), "SubTopic": this.subtopics_selectedItems[j].itemName };
               l++;
             }
           }
@@ -334,8 +332,8 @@ export class ModifyQuestionComponent implements OnInit {
       }
     }
 
-    
-    
+
+
     var x = 0;
 
     for (var i = 0; i < this.links.length; i++) {
@@ -348,7 +346,7 @@ export class ModifyQuestionComponent implements OnInit {
             for (var j = 0; j < data.data.length; j++) {
               this.headings[x] = data.data[j].Head;
               this.paragraph[x] = data.data[j].Para;
-              this.Sub_Topic_Heading[x] = data.data[j].Sub_Topic; 
+              this.Sub_Topic_Heading[x] = data.data[j].Sub_Topic;
 
               var str = this.headings[x];
               if (str.includes("<h1>")) {
@@ -418,32 +416,29 @@ export class ModifyQuestionComponent implements OnInit {
     };
 
     var temp_heading = [];
-    for(var i=0;i<this.headings_selectedItems.length;i++)
-    {
-      temp_heading.push({"id" : this.headings_selectedItems[i].id,"itemName" : this.headings_selectedItems[i].itemName});
+    for (var i = 0; i < this.headings_selectedItems.length; i++) {
+      temp_heading.push({ "id": this.headings_selectedItems[i].id, "itemName": this.headings_selectedItems[i].itemName });
     }
 
     var send_Article_data = {
       "Topics": this.topics_selectedItems,
       "SubTopics": this.subtopics_selectedItems,
-      "Level" : this.level_selectedItems,
+      "Level": this.level_selectedItems,
       "Heading": temp_heading,
       "Head": this.headings,
       "Para": this.paragraph,
-      "Sub_Topic_Heading" : this.Sub_Topic_Heading
+      "Sub_Topic_Heading": this.Sub_Topic_Heading
     };
 
     // -------------------- Call Question Service ------------------
 
     this.modifyQuestionService.Add_New_Questions_With_Choices(send_question_data).subscribe(data => {
       if (data.success) {
-        this.modifyQuestionService.Add_New_Articles_By_Question(send_Article_data).subscribe(data=> {
-          if (data.success) 
-          {
+        this.modifyQuestionService.Add_New_Articles_By_Question(send_Article_data).subscribe(data => {
+          if (data.success) {
             this.flashMessgae.show("Question Added SuccessFully", { cssClass: 'alert-danger', timeout: 2000 });
           }
-          else
-          {
+          else {
             this.flashMessgae.show("Something went Wrong in Articles", { cssClass: 'alert-danger', timeout: 2000 });
           }
         });
@@ -452,6 +447,6 @@ export class ModifyQuestionComponent implements OnInit {
       else {
         this.flashMessgae.show("Something went Wrong in Questions", { cssClass: 'alert-danger', timeout: 2000 });
       }
-     });
+    });
   }
 }

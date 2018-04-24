@@ -1,4 +1,5 @@
-<form *ngIf="usertype" name="candidate" (submit)=StartQuiz()>
+<div *ngIf="usertype" name="candidate">
+
   <div *ngIf="course_List" class="form-control main">
 
     <h1 class="page-header">Courses</h1>
@@ -16,22 +17,19 @@
     <br/>
     <br/>
 
-    <select (change)="onSelectTopic()" [(ngModel)]="selected_topic" class="form-control list" name="something">
-      <option value="0" label="Select One Topic"></option>
-      <option *ngFor="let topic of topic_List" class="list form-control">
-        {{topic.Topic_Name}}
-      </option>
-    </select>
+    <angular2-multiselect [data]="topic_dropdownList" [(ngModel)]="topic_selectedItems" [settings]="topic_dropdownSettings" (onSelect)="onTopicSelect($event)"
+      (onDeSelect)="OnTopicDeSelect($event)" (onSelectAll)="onCourseSelectAll($event)" (onDeSelectAll)="onCourseDeSelectAll($event)">
+    </angular2-multiselect>
 
     <br/>
     <br/>
 
-    <input type="submit" class="btn btn-primary" value="Start" name="something" />
+    <button class="btn btn-primary large" value="Start" name="something" (click)="StartQuiz()"></button>
 
     <br/>
     <br/>
   </div>
-</form>
+</div>
 
 <div>
   <div *ngIf="!usertype">

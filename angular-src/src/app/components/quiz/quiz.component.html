@@ -1,11 +1,14 @@
-<form>
+
+<body class="backgroung_color">
+
+<form >
 <br/>
 <h2> Course Name : {{course}}</h2>
-<h2> Topic Name : {{topic}}</h2>
+<h3> Topic Name : {{topic}}</h3>
 
 <br/>
 
-<div *ngFor="let question of quiz_data;let ind=index">
+<div *ngFor="let question of quiz_data;let ind=index" class="box">
    {{ind+1}} - {{ question.Description }}
 
    <!-- click=SaveResult({{ind}},{{inde}}) onSelect=SaveResult(ind,inde) ngModel=results[{{ind}}]-->
@@ -22,3 +25,4 @@
 <button name="something" (click)="CalculatingResult()" class="btn btn-primary" id="submit"> Submit </button>
 <br/><br/><br/>
 </form>
+</body>

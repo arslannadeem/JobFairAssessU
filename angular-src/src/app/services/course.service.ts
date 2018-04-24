@@ -24,6 +24,7 @@ export class CourseService {
     this.loadToken();
     headers.append('Authorization',this.authToken);
     headers.append('Content-Type','application/json');
+    console.log("before get course");
     return this.http.get('http://localhost:3000/course/getAllCourses',{headers : headers})
     .map(res => {
       return res.json();

@@ -1,29 +1,28 @@
+<body class="backgroung_color">
 <form>
 
     <div *ngIf="!view">
         <br/>
         <h2> Results</h2>
         <br/>
-        <div *ngFor="let question of data;let ind=index" id={{100+ind}}>
+        <div *ngFor="let question of data;let ind=index" id={{100+ind}} class="box">
             {{ind+1}} - {{ question.Description }}
             <div *ngFor="let choice of question.Choices;let inde = index" id={{inde}} class={{ind}}>
                 {{inde + 1}} - {{choice.Description}}
             </div>
             <br/>
         </div>
-        <div>   {{ResultsHighlights()}}     </div>
         
-        <!-- <div data-ng-controller="ResultComponent" data-ng-init="ResultsHighlights()"></div> -->
         <br/>
         <button type="button" (click)="ShowArticles()" class="btn btn-primary"> View Result</button>
-        <!-- <div ng-init="ResultsHighlights()"></div> -->
+
     </div>
 
-    <div *ngIf="view">
+    <div *ngIf="view" class="pre_box">
         <br/>
         <h2> Wrong Question Description </h2>
         <br/>
-        <div *ngFor="let descp of View_result_array;let inde = index">
+        <div *ngFor="let descp of View_result_array;let inde = index" class="box">
             
                 {{inde + 1}} - {{descp.Question}}
                 <br>
@@ -32,3 +31,4 @@
         </div>
     </div>
 </form>
+</body>
